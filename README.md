@@ -33,7 +33,7 @@
 
 2. **Create a `.env` file** in `backend/app` with:
    ```env
-   DATABASE_URL=postgresql://user:password@localhost:5432/gemini_db
+   DATABASE_URL=postgresql://user:password@localhost:5432/dbname
    REDIS_URL=redis://localhost:6379/0
    JWT_SECRET_KEY=your_jwt_secret
    STRIPE_API_KEY=sk_test_...
@@ -41,6 +41,12 @@
    GEMINI_API_KEY=your_gemini_api_key
    STRIPE_PRO_PRICE_ID=price_...
    STRIPE_BASIC_PRICE_ID=price_...
+
+   # Database Configuration
+   POSTGRES_USER=postgres
+   POSTGRES_PASSWORD=password
+   POSTGRES_DB=dbname
+   POSTGRES_PORT=5434
    ```
 
 3. **Install dependencies** (in a virtual environment):
