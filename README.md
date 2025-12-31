@@ -1,21 +1,19 @@
-# Gemini-Style Backend System
+# Gemini Style Backend System
 
 ## Table of Contents
 - [Features](#features)
 - [Setup & Run Instructions](#setup--run-instructions)
 - [Architecture Overview](#architecture-overview)
-- [Queue System Explanation](#queue-system-explanation)
 - [Gemini API Integration Overview](#gemini-api-integration-overview)
 - [Assumptions & Design Decisions](#assumptions--design-decisions)
-- [Testing via Postman](#testing-via-postman)
 - [Access & Deployment Instructions](#access--deployment-instructions)
 
 ---
 
 ## Features
-- OTP-based login (mobile only)
+- OTP based login (mobile only)
 - JWT authentication
-- User-specific chatrooms
+- User specific chatrooms
 - Async Gemini API conversations (via Redis queue)
 - Stripe-powered subscriptions (Basic/Pro)
 - Rate-limiting for Basic users
@@ -31,7 +29,7 @@
    cd backend/app
    ```
 
-2. **Create a `.env` file** in `backend/app` with:
+2. **Create a `.env` file** in `backend` with:
    ```env
    DATABASE_URL=postgresql://user:password@localhost:5432/dbname
    REDIS_URL=redis://localhost:6379/0
@@ -91,17 +89,8 @@
 
 ## Environment Variables Example
 
-A sample environment variable file is provided as `env.example.text` in the `backend/app` directory. This file lists all the required environment variables with example values and comments for each variable.
-
-**How to use:**
-1. Copy `env.example.text` to a new file named `.env` in the same directory:
-   ```sh
-   cp env.example.text .env
-   ```
-2. Edit the `.env` file and replace the placeholder/example values with your actual secrets and configuration values.
-3. The application will automatically load environment variables from this `.env` file when starting up.
-
-**Note:** Never commit your real `.env` file with secrets to version control. Only share `env.example.text` as a reference for other developers.
+A sample environment variable file is provided as `.env.example` in the `backend` directory. This file lists all the required environment variables with example values and comments for each variable.
+**Note:** Never commit your real `.env` file with secrets to version control. Only share `.env.example.` as a reference for other developers.
 
 ---
 
@@ -112,7 +101,7 @@ A sample environment variable file is provided as `env.example.text` in the `bac
 - **Redis**: Used for both caching (chatroom lists) and as a Celery broker for background tasks.
 - **Celery**: Handles background/async tasks (e.g., Gemini API calls, can be extended for other async jobs).
 - **Stripe**: Manages subscription payments and webhooks.
-- **Google Gemini API**: Provides AI-powered chat responses.
+- **Google Gemini API**: Provides AI powered chat responses.
 
 ### Key Modules
 - `routers/`: All API endpoints (auth, chatroom, user, subscription)
@@ -122,15 +111,6 @@ A sample environment variable file is provided as `env.example.text` in the `bac
 - `gemini.py`: Gemini API integration
 - `stripe_utils.py`: Stripe integration helpers
 - `celery_worker.py`: Celery app setup
-
----
-
-## Queue System Explanation
-
-- **Celery** is used for background processing, with Redis as the broker and backend.
-- While Gemini API calls are now synchronous for immediate response, the system is designed to support async/queued processing for scalability (e.g., long-running AI tasks, notifications).
-- To add a new async task, define a function with `@celery_app.task` and call it with `.delay()`.
-- Celery workers must be running for background tasks to be processed.
 
 ---
 
@@ -154,24 +134,9 @@ A sample environment variable file is provided as `env.example.text` in the `bac
 
 ---
 
-## Testing via Postman
-
-1. **Import the Postman collection**:
-   - Use the provided `kuvaka_tech_assignment.postman_collection.json` file.
-   - In Postman, go to File > Import > select the JSON file.
-
-2. **Set the `{{jwt_token}}` variable**:
-   - After verifying OTP, copy the `access_token` from the response and set it as the `jwt_token` variable in Postman.
-
-3. **Test all endpoints**:
-   - Requests are organized by folders (Auth, User, Chatroom, Subscription, Stripe Webhook).
-   - All protected endpoints require the JWT token as shown in the collection.
-
----
-
 ## Access & Deployment Instructions
 
-- **Local Access**: By default, the API runs at `http://localhost:8000/`.
+- **Local Access**: By default, the API runs at `http://127.0.0.1:8000/`.
 - **Deployment**:
   - Use a production WSGI server (e.g., Gunicorn with Uvicorn workers) for deployment.
   - Set environment variables securely in your deployment environment.
