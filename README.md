@@ -58,7 +58,7 @@
    - **FastAPI server:**
      _Run this command from the backend directory:_
      ```sh
-     uvicorn main:app --reload
+     uvicorn app.main:app --reload
      ```
    - **Celery worker:**
      _Run this command from the backend directory:_
